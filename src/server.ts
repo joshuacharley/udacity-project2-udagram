@@ -42,6 +42,16 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       deleteLocalFiles([filteredpath]);
     } );
   } );
+
+  //authentication header to block public requests
+  app.use((req: Request, res: Response, next) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader === process.env.AUTH_TOKEN) {
+      next();
+    } else {
+      res.status(401).send('Unauthorized');
+    }
+  });
   
 
   //! END @TODO1
